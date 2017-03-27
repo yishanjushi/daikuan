@@ -61,7 +61,7 @@
 
 	com.checkReload = function () {
 	    var fn = function () {
-	        document.location.reload();
+	        //document.location.reload();
 	    }
 	    //com.confirm('网络连接出错，需要重新载入吗', fn, '提示', ['取消', '刷新']);
 	    com.alert('网络连接出错,重新载入',fn);

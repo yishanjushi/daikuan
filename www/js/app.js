@@ -274,8 +274,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         })
         ;
 
-
-        $urlRouterProvider.otherwise("/tab/home");
+        if(bll.title == '51贷款管家')
+            $urlRouterProvider.otherwise("/tab/line");
+        else
+            $urlRouterProvider.otherwise("/tab/home");
 
     });
 
@@ -481,7 +483,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
                     var diffDays = com.dateDiff(com.convertToDateTime(data.time, 2), com.convertToDateTime(new Date(), 2));
                     if (diffDays > 0) {
-                        
+                        $scope.diffDays = diffDays;
                     }
 
                     $scope.Lines = data.Records;

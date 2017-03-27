@@ -9,7 +9,7 @@ var bll = {};
 	//bll.service = 'http://localhost:8088/';
 
 	bll.app_id = 1;
-	bll.title = '51贷款之家';
+	bll.title = '51贷款管家';
 	bll.version='1.0.0';
 	bll.user_id=10;
 	bll.self_id=0;
@@ -59,7 +59,7 @@ var bll = {};
         $http.jsonp(url).success(function (data) {
             fn(data);
         }).error(
-            function (e) { fn({ "code": 100, "msg": "网络问题,请重试" }) }
+            function (e) { console.log(e); fn({ "code": 100, "msg": "网络问题,请重试" }) }
         );
     }
 
@@ -193,7 +193,7 @@ var bll = {};
 			};
 	    var inFn = function (data) {
 	        if (data && data.code == 0) {
-	            com.setItem("LoanLines", JSON.parse(data));
+	            com.setItem("LoanLines", JSON.stringify(data));
 	        }
 	        else {
 	            try {
