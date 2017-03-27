@@ -374,6 +374,16 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             bll.login(type, m, p, fn, $http);
         }
 
+        $rootScope.resetHeight = function () {
+            return screen.height;
+        }
+        $rootScope.resetWidth = function () {
+            return screen.width;
+        }
+        $rootScope.cardWidth = function () {
+            return screen.width / 2 - 20;
+        }
+
 
         $scope.onTapPage = function () {
             var curIndex = $ionicSlideBoxDelegate.currentIndex() % $scope.aryAd01.length;
@@ -393,15 +403,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             $state.go('tabs.detail', params);
         }
 
-        $rootScope.resetHeight = function () {
-            return screen.height;
-        }
-        $rootScope.resetWidth = function () {
-            return screen.width;
-        }
-        $rootScope.cardWidth = function () {
-            return screen.width / 2 - 20;
-        }
+
         $scope.aryAd01 = [];
         var fn = function (data) {
             $rootScope.hideLoading();
@@ -466,7 +468,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
         $scope.loginTitle = '登录';
         $scope.loginBtnTitle = '登录';
-    
 
         $rootScope.showHide = 0;
         $rootScope.reloadLine = bll.isLogin();
@@ -477,6 +478,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             var fnLine = function (data) {
                 $rootScope.hideLoading();
                 if (data && data.code == 0) {
+
+                    var diffDays = com.dateDiff(com.convertToDateTime(data.time, 2), com.convertToDateTime(new Date(), 2));
+                    if (diffDays > 0) {
+                        
+                    }
+
                     $scope.Lines = data.Records;
                     if (data.Records.length > 0) {
                         $scope.Line = data.Records[0];
@@ -512,7 +519,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         }
 
         $scope.goSet = function (x) {
-			$state.go('tabs.me');
+            $state.go('tabs.me');
         }
 
 

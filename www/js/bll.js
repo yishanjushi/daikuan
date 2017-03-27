@@ -189,11 +189,28 @@ var bll = {};
 			    "userId": bll.getUserId(),
 			    "token": bll.getToken(),
 			    "version": bll.version,
-			    "data": {"show_hide":showHide}
+			    "data": { "show_hide": showHide }
 			};
-
+	    var inFn = function (data) {
+	        if (data && data.code == 0) {
+	            com.setItem("LoanLines", JSON.parse(data));
+	        }
+	        else {
+	            try {
+	                var str = com.getItem("LoanLines");
+	                if (str != null) {
+	                    data = JSON.parse(str);
+	                }
+	            }
+	            catch (e) {
+	                console.log(e);
+	                com.removeItem("LoanLines");
+	            }
+	        }
+	        fn(data);
+	    }
 	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
-	    bll.get($http, url, fn);
+	    bll.get($http, url, inFn);
 	}
 
 	bll.getLoanLine = function (lineId, fn, $http) {
