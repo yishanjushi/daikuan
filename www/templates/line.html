@@ -1,0 +1,36 @@
+﻿
+
+
+<ion-view view-title="我的贷款" ng-controller="LineCtrl">
+    <ion-nav-buttons side="right">
+      <i class="ion-more" ng-click="more()"></i>
+    </ion-nav-buttons>
+<ion-content class="my-line">
+
+        <div style="width:100%; height:100px; padding:5px; margin-top:5px; border-bottom:1px solid #ddd;" ng-show="Line!=null">
+            
+            <div style=" float:right; width:100px; " >
+                <div style="font-size:50px; height:50px; line-height:50px; font-weight:bold; text-align:center">{{Line.leave_days}}<font style="font-size:10px;">天</font></div>
+                <div style=" margin-top:10px; text-align:center; color:#fff; font-weight:bolder; border-radius: 5px; padding:2px; background-color:{{Line.leave_color}}" > {{Line.leave_txt}} </div>
+            </div>
+
+            <div style=" margin-right:60px; padding-left:5px;">
+                <div style="font-size:16px; font-weight:bold" >{{Line.loan_name}}<font style="font-size:8px;">{{Line.attach_label.length==0?'':'['+Line.attach_label+']'}}</font></div>
+                <div style="margin-top:10px;" >还需还：¥{{Line.leave_amount.toFixed(2)}}</div>
+                <div style="margin-top:10px;">还款日：{{Line.repayment_date}}</div>
+            </div>
+        </div>
+
+        <div class="row" ng-repeat="x in Lines" on-tap="onLineSet(x)">
+          <div class="col col-30 col-center">{{x.loan_name}}<font style="font-size:10px;">{{x.attach_label.length==0?'':'['+x.attach_label+']'}}</font></div>
+          <div class="col col-40 col-center" style="min-width:90px; text-align:right;">¥{{(x.local_amount - x.repayed_amount).toFixed(2)}}</div>
+          <div class="col col-20 col-center" style="min-width:90px; text-align:right;"><font class="tian">{{x.leave_days}}</font>天<span class="icon" style=" background:{{x.leave_color}}">{{x.leave_txt}}</span></div>
+          <div class="col col-center" style="max-width:20px; text-align:left" ><i class="ion-line-jiantou"></i></div>
+        </div>
+
+        <div class="row">
+          <div class="col col-center" style=" text-align:center;" on-tap="onLineAdd()">+添加贷款</div>
+        </div>
+        
+</ion-content>
+</ion-view>

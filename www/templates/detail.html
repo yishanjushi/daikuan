@@ -1,0 +1,71 @@
+﻿<ion-view hide-tabs="true" view-title="{{title}}" ng-controller="DetailCtrl">
+    <ion-content class="my-detail">
+        <div class="item item-thumbnail-left" style="border:none; border-bottom:1px solid #ddd; ">
+          <img src="img/pixel.gif" class="bgdk2" style="width:80px;height:80px;background-position:-{{Item.logo_x*2}}px -{{Item.logo_y*2}}px;">
+          <h2>{{Item.plat_name}}</h2>
+          <p>{{Item.introduction}}</p>
+          <p>成功申请<font style="color:#ff0000">{{Item.apply_users}}</font>人 | 通过率 <font style="color:#ff0000">{{Item.pass_rate}}</font></p>
+        </div>
+        <div class="row" style="color:#666; font-size:10px;">
+          <div class="col col-33" style=" text-align:center">额度<br/><font style="color:#ff0000">{{Item.loan_limit}}万</font></div>
+          <div class="col col-33" style=" text-align:center">期限<br/><font style="color:#ff0000">{{Item.term_limit}}</font></div>
+          <div class="col col-33" style=" text-align:center">日费率<br/><font style="color:#ff0000">{{Item.rate_limit}}</font></div>
+        </div>
+        
+        <div class="list" style=" font-size:12px;">
+
+        <div class="item item-divider">
+          申请材料
+        </div>
+
+        <div class="item" style=" margin:0px;  padding-top:0px;">
+          <div ng-repeat-start="n in Conditions" style="display:none"></div>
+          <h3 style=" margin-top:10px;">{{n.t}}</h3>
+          <p style=" white-space:normal; line-height:22px;"> <em ng-repeat="x in n.a" >{{getMaterial(x)}}</em></p>
+          <div ng-repeat-end style="display:none"></div>
+        </div>
+
+        
+        <!--div class="item item-divider">
+          注意事项(经验总结)
+        </div>
+
+        <div class="item">
+          <p>身份证 | 评论232次</p>
+        </div-->
+
+        <div class="item item-divider">
+          用户留言
+        </div>
+
+        <div class="list">
+
+        <a class="item item-avatar" ng-repeat="x in records">
+          <img src="img/nohead.jpg">
+          <p>{{x.show_name}}</p>
+          <h2>{{x.content}}</h2>
+          <p>{{x.time}}</p>
+        </a>
+
+       
+      </div>
+
+      </div>
+        
+        
+
+    </ion-content>
+
+    <ion-footer-bar align-title="left" class="bar-light" style=" padding:0px;">
+        
+        <div class="row row-wrap" style="padding:0px;">
+          <div class="col-50">
+          <button class="button button-full button-positive" style=" margin:0px; padding:0px; height:43px;" on-tap="showLeave()">我要留言</button>
+          </div>
+          <div class="col-50">
+          <button class="button button-full button-assertive" style=" margin:0px; padding:0px; height:43px;" on-tap="applyLoan()" >立即申请</button>
+          </div>
+        </div>
+    </ion-footer-bar>
+</ion-view>
+

@@ -1,0 +1,23 @@
+﻿
+<ion-view view-title="登录" ng-controller="LoginCtrl">
+    <ion-nav-buttons side="right">
+      <a class="button" href="#/tab/register">
+        注册
+      </a>
+    </ion-nav-buttons>
+    <ion-content class="padding">
+    <div class="list">
+        <label class="item item-input">
+          <span class="input-label">手机号码：</span>
+          <input type="text" ng-model="mobile">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">密码：</span>
+          <input type="password" ng-model="password">
+        </label>
+      </div>
+      <div class="padding">
+        <button class="button button-block button-positive" on-tap="onTapLogin(mobile,password)" >登录</button>
+      </div>
+    </ion-content>
+</ion-view>

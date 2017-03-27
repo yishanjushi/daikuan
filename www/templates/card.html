@@ -1,0 +1,27 @@
+﻿
+<ion-view view-title="信用卡" ng-controller="CardCtrl">
+<ion-content class="padding">
+
+<div class="row row-wrap" style=" padding:0px;">
+    	  <h5 style="width:{{resetWidth()}}px;margin-bottom:0px;">信用卡代还</h5>
+          <div class="card" style="width:{{cardWidth()}}px; margin:5px;" ng-repeat="x in records" ng-if="x.category=='信用卡代还'" on-tap="onTapItem(x)">
+            <a class="item item-thumbnail-left" style=" padding:10px 0px 0px 55px;min-height: 55px; white-space:none;">
+              <img src="img/pixel.gif" class="bgdk" style="width:40px;height:40px;background-position:-{{x.logo_x}}px -{{x.logo_y}}px;">
+              <h2>{{x.plat_name}}</h2>
+              <p style="white-space:normal;font-size:12px; line-height:12px;">{{x.introduction}}</p>
+            </a>
+          </div>
+
+          <h5 style="width:{{resetWidth()}}px;margin-bottom:0px;">在线办卡</h5>
+          <div class="card" style="width:{{cardWidth()}}px; margin:5px;" ng-repeat="x in records" ng-if="x.category=='在线办卡'" on-tap="onTapItem(x)">
+            <a class="item item-thumbnail-left" style=" padding:10px 0px 0px 55px;min-height: 55px; white-space:none;">
+              <img ng-src="img/logos/{{x.logo_name}}.png" style="width:40px;height:40px;">
+              <h2>{{x.plat_name}}</h2>
+              <p style="white-space:normal;font-size:12px; line-height:12px;">{{x.introduction}}</p>
+            </a>
+          </div>
+
+</div>
+
+</ion-content>
+</ion-view>

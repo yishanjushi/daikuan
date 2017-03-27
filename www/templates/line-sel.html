@@ -1,0 +1,35 @@
+﻿<ion-view view-title="选择" ng-controller="LineSelCtrl">
+<div class="tabs tabs-striped tabs-top tabs-color-assertive">
+  <a ng-class="{true:'tab-item active',false:'tab-item'}[showPlat]" on-tap="onPlat()">
+    贷款
+  </a>
+  <a ng-class="{true:'tab-item active',false:'tab-item'}[!showPlat]" on-tap="onCard()">
+    信用卡
+  </a>
+</div>
+
+<ion-content class="padding" class="line-sel" delegate-handle="lineSelScroll">
+<div class="row row-wrap" style=" padding:0px; padding-top:40px;" ng-show="showPlat">
+    <div ng-repeat-start="n in category" style="display:none"></div>
+    	  <h5 style="width:{{resetWidth()}}px;margin-bottom:0px;">{{n}}</h5>
+          <div class="card" style="width:{{cardWidth()}}px; margin:5px;" ng-repeat="x in records" ng-if="x.category==n" on-tap="onTapItem(x)">
+            <a class="item item-thumbnail-left" style=" padding:10px 0px 0px 55px;min-height: 55px; white-space:none;">
+              <img src="img/pixel.gif" class="bgdk" style="width:40px;height:40px;background-position:-{{x.logo_x}}px -{{x.logo_y}}px;">
+              <h2>{{x.plat_name}}</h2>
+              <p style="white-space:normal;font-size:12px; line-height:12px;">{{x.introduction}}</p>
+            </a>
+          </div>
+    <div ng-repeat-end></div>
+</div>
+<div class="row row-wrap" style=" padding:0px; padding-top:40px;" ng-show="!showPlat">
+<h5 style="width:{{resetWidth()}}px;margin-bottom:0px;">在线办卡</h5>
+          <div class="card" style="width:{{cardWidth()}}px; margin:5px;" ng-repeat="x in records" ng-if="x.category=='在线办卡'" on-tap="onTapItem(x)">
+            <a class="item item-thumbnail-left" style=" padding:10px 0px 0px 55px;min-height: 55px; white-space:none;">
+              <img ng-src="img/logos/{{x.logo_name}}.png" style="width:40px;height:40px;">
+              <h2>{{x.plat_name}}</h2>
+              <p style="white-space:normal;font-size:12px; line-height:12px;">{{x.introduction}}</p>
+            </a>
+          </div>
+</div>
+</ion-content>
+</ion-view>

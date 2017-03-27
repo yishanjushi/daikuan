@@ -1,0 +1,66 @@
+﻿
+<ion-view view-title="{{title}}" ng-controller="LineAddCtrl">
+    <ion-content class="padding">
+    <div class="list" style="border-radius: 5px;">
+        <label class="item item-input">
+          <span class="input-label">贷款名称：</span>
+          <input type="text" maxlength="20" ng-model="Line.loan_name" placeholder="请输入或者选择">
+          <a style="float:right; margin-right:20px;" on-tap="onSel()">选择</a>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">附加标记：</span>
+          <input type="text" maxlength="20" ng-model="Line.attach_label" placeholder="相同贷款在这里做不同标记">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">贷款金额：</span>
+          <input type="number" ng-model="Line.loan_amount">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">还款金额：</span>
+          <input type="number" ng-model="Line.local_amount">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">还款日期：</span>
+          <input id="repaymentDate" type="date">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">还款周期：</span>
+          <select ng-model="Line.repayment_cycle">
+              <option value=0>仅一次</option>
+              <option value=1>每月</option>
+              <option value=2>每2月</option>
+              <option value=3>每3月</option>
+              <option value=4>每4月</option>
+              <option value=5>每5月</option>
+              <option value=6>每半年</option>
+              <option value=7>每7月</option>
+              <option value=8>每8月</option>
+              <option value=9>每9月</option>
+              <option value=10>每10月</option>
+              <option value=11>每11月</option>
+              <option value=12>每一年</option>
+            </select>
+        </label>
+        <label class="item item-input">
+          <span class="input-label">提醒设置：</span>
+          提前<select ng-model="Line.remind_days">
+              <option value="1">1天</option>
+              <option value="2">2天</option>
+              <option value="3">3天</option>
+              <option value="4">4天</option>
+              <option value="5">5天</option>
+              <option value="6">6天</option>
+              <option value="7">7天</option>
+            </select>
+           &nbsp;<input id="remindTime" type="time" value="09:52" style="font-size:15px;  margin-top:2px;">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">备注：</span>
+          <input type="text" ng-model="Line.remark" placeholder="可选输入">
+        </label>
+      </div>
+      <div class="padding">
+        <button class="button button-block button-positive" on-tap="onSafe()" >保存</button>
+      </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,250 @@
+[
+  {
+    "file": "css/style.css",
+    "hash": "e1048b1c4a1e13845c3ac96acbf341d8"
+  },
+  {
+    "file": "img/daikuan.png",
+    "hash": "cdde415aea486500cac5f6cb7331fdb4"
+  },
+  {
+    "file": "img/gywm.png",
+    "hash": "f476fc8e2098cd88d0059bf323772637"
+  },
+  {
+    "file": "img/i-card.png",
+    "hash": "a5e3af0e7f3327a1530f4b63ecfba6f1"
+  },
+  {
+    "file": "img/i-card1.png",
+    "hash": "29a6ed3847d8a84d6f51be895730d283"
+  },
+  {
+    "file": "img/i-card2.png",
+    "hash": "62764cfa3c5683ca715c4777d7d26266"
+  },
+  {
+    "file": "img/i-more.png",
+    "hash": "ff631e02b83304e5b6813467695a22be"
+  },
+  {
+    "file": "img/jiantou.png",
+    "hash": "b13fddadb7ba0212301dbe2eba4c2a08"
+  },
+  {
+    "file": "img/jiantou01.png",
+    "hash": "5493fdb7d5a8b0653593977e10b2837c"
+  },
+  {
+    "file": "img/logo.png",
+    "hash": "4773f392a846244f7a6695905e35feb6"
+  },
+  {
+    "file": "img/logos/guangfa.png",
+    "hash": "c1d9fba966a1963268c020bd5824d1ae"
+  },
+  {
+    "file": "img/logos/huaqi.png",
+    "hash": "d335d9949125c27f9ff4796abaef3221"
+  },
+  {
+    "file": "img/logos/jiaotong.png",
+    "hash": "42e5154db52d83e41d11276cc418991e"
+  },
+  {
+    "file": "img/logos/minsheng.png",
+    "hash": "4f4c21ea6712f72ba54a5e34cf51a7e3"
+  },
+  {
+    "file": "img/logos/pingan.png",
+    "hash": "5540dba08d304b910a1a9a0375ad27ed"
+  },
+  {
+    "file": "img/logos/pufa.png",
+    "hash": "dc7553a81eb5ccaa4c2d9d3d763c8a34"
+  },
+  {
+    "file": "img/logos/qita.png",
+    "hash": "036f11328b5d9b88cbc930e8d126d0fc"
+  },
+  {
+    "file": "img/logos/shanghai.png",
+    "hash": "3af03a9adba1e7433261eb624d343426"
+  },
+  {
+    "file": "img/logos/xingye.png",
+    "hash": "71a896f1a61f031f051abe0a94afa5b4"
+  },
+  {
+    "file": "img/logos/zhaoshang.png",
+    "hash": "10d922deec1940994dada6e2436befc9"
+  },
+  {
+    "file": "img/logos/zheshang.png",
+    "hash": "aad50c9985dba74841762a6a4b3b342f"
+  },
+  {
+    "file": "img/logos/zhongxin.png",
+    "hash": "cfadb19bb90a28e64233641d675491e1"
+  },
+  {
+    "file": "img/nohead.jpg",
+    "hash": "4572f39670394592c42165b3d07d74fe"
+  },
+  {
+    "file": "img/pixel.gif",
+    "hash": "fc94fb0c3ed8a8f909dbc7630a0987ff"
+  },
+  {
+    "file": "img/shenfen.png",
+    "hash": "3e9532e30d5c929b7b5487b780a900dc"
+  },
+  {
+    "file": "img/xin.png",
+    "hash": "9efd16ee4fc517bb4b7fa136ea2d9261"
+  },
+  {
+    "file": "img/xiugai.png",
+    "hash": "3ec6fad77930ea37fda142c0e7c36077"
+  },
+  {
+    "file": "index.html",
+    "hash": "af1570a12d23d255161c139b2764b617"
+  },
+  {
+    "file": "js/app.js",
+    "hash": "563fb2bfa9cd3d5dcff1e796080f7921"
+  },
+  {
+    "file": "js/bll.js",
+    "hash": "2f9d9a5d62827be751f0092cefbdb0dc"
+  },
+  {
+    "file": "js/com.js",
+    "hash": "4b221a8466347839bfde7db74882fd7e"
+  },
+  {
+    "file": "js/elastic.js",
+    "hash": "423674001f95c81926594b45f8ed37ad"
+  },
+  {
+    "file": "js/services.js",
+    "hash": "ea0c889d61d3cb744ebe401c66a28a0a"
+  },
+  {
+    "file": "lib/ionic/css/ionic.min.css",
+    "hash": "20d29ea12426cffb05c508c88acdb11a"
+  },
+  {
+    "file": "lib/ionic/fonts/ionicons.eot",
+    "hash": "2c2ae068be3b089e0a5b59abb1831550"
+  },
+  {
+    "file": "lib/ionic/fonts/ionicons.svg",
+    "hash": "621bd386841f74e0053cb8e67f8a0604"
+  },
+  {
+    "file": "lib/ionic/fonts/ionicons.ttf",
+    "hash": "24712f6c47821394fba7942fbb52c3b2"
+  },
+  {
+    "file": "lib/ionic/fonts/ionicons.woff",
+    "hash": "05acfdb568b3df49ad31355b19495d4a"
+  },
+  {
+    "file": "lib/ionic/js/ionic.bundle.min.js",
+    "hash": "940466e58c5d23511aab97b24ef14702"
+  },
+  {
+    "file": "lib/ionic/version.json",
+    "hash": "421fc5b26f0c248e73d067ca80dbd6e1"
+  },
+  {
+    "file": "manifest.json",
+    "hash": "a3e888fb8cb528ebdbf38073f29d148c"
+  },
+  {
+    "file": "service-worker.js",
+    "hash": "7de431000cd0f19fc38619fdd7314f81"
+  },
+  {
+    "file": "support.html",
+    "hash": "a91af8d98db33b2f61831eb0e947cef6"
+  },
+  {
+    "file": "templates/about.html",
+    "hash": "b4f3d7b3f406c0a5a590c40306f1d442"
+  },
+  {
+    "file": "templates/card.html",
+    "hash": "f9beeef61e397b2cbc7e1d8a0daf3a49"
+  },
+  {
+    "file": "templates/contact.html",
+    "hash": "6db963c53387e650294a8e7b835bf7ea"
+  },
+  {
+    "file": "templates/detail.html",
+    "hash": "54cef702e359f1345ed44cda16307c19"
+  },
+  {
+    "file": "templates/home.html",
+    "hash": "2a38174ff76e72bbf855db00a788b26c"
+  },
+  {
+    "file": "templates/leave.modal.html",
+    "hash": "b30d83a00fa79bdacd2183f108aeb5dc"
+  },
+  {
+    "file": "templates/line-add.html",
+    "hash": "9d0112065b30b1fb38812b372f0872d2"
+  },
+  {
+    "file": "templates/line-detail.html",
+    "hash": "9eb736b546ae93e9a9d93a4e5d018c23"
+  },
+  {
+    "file": "templates/line-sel.html",
+    "hash": "a1b5277db6177cc579509689cb3283b1"
+  },
+  {
+    "file": "templates/line.html",
+    "hash": "c4925131ecbb68e3dcc97afe090ff011"
+  },
+  {
+    "file": "templates/login.html",
+    "hash": "bdf4f4e20c3f43742616fc6577c04175"
+  },
+  {
+    "file": "templates/login.modal.html",
+    "hash": "00ca7414c0b60c7764ec97a704c1f50c"
+  },
+  {
+    "file": "templates/me.html",
+    "hash": "00a473c772e62f88d1fb2e5b7ae4ae19"
+  },
+  {
+    "file": "templates/message-detail.html",
+    "hash": "decc21c4819c89fe560fd386f5c5e3f7"
+  },
+  {
+    "file": "templates/password.modal.html",
+    "hash": "5c6f323708d420d1ca99bf5b54085f1e"
+  },
+  {
+    "file": "templates/plat.html",
+    "hash": "57db33d9e094717622bed84186e5674f"
+  },
+  {
+    "file": "templates/register.html",
+    "hash": "4e3c033350831be4fea934fe586fd53b"
+  },
+  {
+    "file": "templates/set.html",
+    "hash": "a151e8053bb6fee002ce6d7e25fb3725"
+  },
+  {
+    "file": "templates/tabs.html",
+    "hash": "843ed52d456d307e6c528b6b507f2b6b"
+  }
+]

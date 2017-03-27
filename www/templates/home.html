@@ -1,0 +1,44 @@
+﻿
+
+
+<ion-view view-title="{{appTitle}}">
+
+<ion-content class="my-home">
+
+        
+
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" auto-play="true" does-continue="true" slide-interval=2000 show-pager="true" on-tap="onTapPage()" active-slide="model.activeIndex" delegate-handle="delegateHandler" style="height:128px">
+          <ion-slide ng-repeat="x in aryAd01 | limitTo:4">
+            <div class="box">
+              <img ng-src="{{getItem(x).ad_img_url}}">
+            </div>
+          </ion-slide>
+        </ion-slide-box>
+
+
+        <div class="row row-wrap" style="padding:0px;">
+          <div class="col-50" style="padding:0px; max-height:55px;" ng-repeat="x in aryAd02 | limitTo:4" on-tap="onTapItem(getItem(x))">
+            <a class="item item-thumbnail-left" style=" max-height:55px; padding-left:55px;">
+              <img src="img/pixel.gif" class="bgdk" style="width:40px;height:40px;background-position:-{{getItem(x).logo_x}}px -{{getItem(x).logo_y}}px;">
+              <h3>{{getItem(x).plat_name}}</h3>
+              <p>{{getItem(x).introduction}}</p>
+            </a>
+          </div>
+        </div>
+
+        <ul class="list" style=" margin:0px; padding:0px;">
+        <li class="item" style="width:{{resetWidth()/2}}px;" on-tap="onTapItem(x)" ng-repeat="x in records | limitTo:14">
+           	<div class="vertical-container" style=" background-color:{{x.plat_color}}; ">
+            <em>{{x.plat_name}}</em> 
+            </div>
+            <div class="my-box" style="width:{{resetWidth()/2-65}}px; ">
+            <p>额度 {{x.loan_limit}}万</p>
+            <p style="font-size:12px; line-height:12px;">期限 {{x.term_limit}}</p>
+            <p style="font-size:12px; line-height:12px;">通过率 {{x.pass_rate}}</p>
+            </div>
+        </li>
+        <div style="clear:both"></div>
+        </ul>
+        
+</ion-content>
+</ion-view>

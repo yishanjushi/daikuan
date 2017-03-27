@@ -1,0 +1,18 @@
+﻿
+<ion-view view-title="注册" ng-controller="RegisterCtrl">
+    <ion-content class="padding">
+    <div class="list">
+        <label class="item item-input">
+          <span class="input-label">手机号码：</span>
+          <input type="text" ng-model="mobile">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">密码：</span>
+          <input type="password" ng-model="password">
+        </label>
+      </div>
+      <div class="padding">
+        <button class="button button-block button-positive" on-tap="onTapRegister(mobile,password)" >注册</button>
+      </div>
+    </ion-content>
+</ion-view>
