@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('starter', ['ionic', 'monospaced.elastic'])
-.run(function ($ionicPlatform, Push) {
+.run(function ($ionicPlatform, $http, Push) {
 
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins.Keyboard) {
@@ -284,9 +284,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
 
 
-    app.controller('HomeTabCtrl', function ($scope, $http, $rootScope, $state, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate, $ionicViewSwitcher, $ionicLoading) {
+    app.controller('HomeTabCtrl', function ($scope, $http, $q, $rootScope, $state, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate, $ionicViewSwitcher, $ionicLoading) {
 
-        bll.logView(1, 'open', $http);
+        //bll.logView(1, 'open', $cordovaDevice, $http);
 
         $ionicModal.fromTemplateUrl('templates/login.modal.html', {
             scope: $scope
@@ -387,25 +387,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         }
 
 
-        $scope.onTapPage = function () {
-            var curIndex = $ionicSlideBoxDelegate.currentIndex() % $scope.aryAd01.length;
-            $scope.onTapItem($scope.getItem($scope.aryAd01[curIndex]));
-        }
-
-        $scope.onTapPlat = function (x) {
-            com.open(x.ad_url);
-        }
-
-        $scope.onTapItem = function (x) {
-            //var ref = cordova.InAppBrowser.open(x.ad_url, '_blank', 'location=yes,closebuttoncaption=返回,toolbarposition=top');
-            var params =
-			{
-			    "plat_id": x.auto_id
-			};
-            $state.go('tabs.detail', params);
-        }
-
-
         $scope.aryAd01 = [];
         var fn = function (data) {
             $rootScope.hideLoading();
@@ -441,8 +422,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             $ionicSlideBoxDelegate.update();
             $ionicSlideBoxDelegate.loop(true);
         }
-        $rootScope.showLoading();
-        bll.getLoanPlats(0, fn, $http);
 
 
         $rootScope.getItem = function (id) {
@@ -459,17 +438,260 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 $scope.Materials = records;
             }
         }
-        bll.getLoanMaterial(fnMaterial, $http);
+
         $rootScope.getMaterial = function (id) {
             return $scope.Materials[id].name;
         }
 
+        var funcA = function () {
+            console.log("funcA");
+            return bll.getServeInfo(function (data) { console.log(data); }, $http);
+        }
+        var funcB = function () {
+            console.log("funcB");
+            return bll.getLoanMaterial(fnMaterial, $http);
+        }
+        var funcC = function () {
+            console.log("funcC");
+            return bll.getLoanPlats(0, fn, $http);
+        }
+
+        $rootScope.showLoading();
+        $q.all([funcA(), funcB(), funcC()])
+        .then(function (ary) {
+            $rootScope.hideLoading();
+            //console.log('result123');
+            console.log(ary);
+            if (ary[1] === undefined && com.getItem("LoanMaterial") == null) {
+                com.checkReload();
+                return;
+            }
+            if (ary[2] === undefined && com.getItem("LoanPlats") == null) {
+                com.checkReload();
+                return;
+            }
+
+        });
+
+
+
+
+        $scope.onTapPage = function () {
+            var curIndex = $ionicSlideBoxDelegate.currentIndex() % $scope.aryAd01.length;
+            $scope.onTapItem($scope.getItem($scope.aryAd01[curIndex]));
+        }
+
+        $scope.onTapPlat = function (x) {
+            com.open(x.ad_url);
+        }
+
+        $scope.onTapItem = function (x) {
+            //var ref = cordova.InAppBrowser.open(x.ad_url, '_blank', 'location=yes,closebuttoncaption=返回,toolbarposition=top');
+            var params =
+			{
+			    "plat_id": x.auto_id
+			};
+            $state.go('tabs.detail', params);
+        }
+
     });
 
-    app.controller('LineCtrl', function ($scope, $rootScope, $http, $state, $ionicModal, $ionicActionSheet, $ionicLoading) {
+    app.controller('LineCtrl', function ($scope, $rootScope, $http, $q,  $ionicSlideBoxDelegate, $state, $ionicModal, $ionicActionSheet, $ionicLoading) {
 
-        $scope.loginTitle = '登录';
-        $scope.loginBtnTitle = '登录';
+
+        if (bll.title == '51贷款管家') {
+
+            bll.logView(1, 'open', $http);
+
+            $ionicModal.fromTemplateUrl('templates/login.modal.html', {
+                scope: $scope
+            }).then(function (modal) {
+                $scope.loginModal = modal;
+            });
+
+            $rootScope.showLoading = function () {
+                $ionicLoading.show({
+                    template: '<ion-spinner icon="ios"></ion-spinner>',
+                    noBackdrop: true
+                });
+            }
+
+            $rootScope.hideLoading = function () {
+                $ionicLoading.hide();
+            }
+
+            $rootScope.appTitle = bll.title;
+            $rootScope.alert = function (content) {
+                $ionicPopup.alert({
+                    title: '提示',
+                    template: content,
+                    okText: '确定'
+                });
+            }
+
+            $rootScope.getUser = function () { return bll.getUser() };
+            $rootScope.User = bll.getUser();
+
+            $rootScope.isLogin = function () {
+                return bll.isLogin();
+            }
+
+            $rootScope.isRegister = false;
+            $scope.loginTitle = '登录';
+            $scope.loginBtnTitle = '登录';
+            $rootScope.showLogin = function () {
+                $scope.loginModal.show();
+            }
+            $rootScope.hideLogin = function () {
+                $rootScope.isRegister = false;
+                $scope.loginTitle = '登录';
+                $scope.loginBtnTitle = '登录';
+                $scope.loginModal.hide();
+            }
+            $rootScope.goRegister = function () {
+                $rootScope.isRegister = true;
+                $scope.loginTitle = '注册';
+                $scope.loginBtnTitle = '注册';
+            }
+
+
+            $rootScope.onTapLogin = function (m, p, cp) {
+                var type = 1;
+                if ($rootScope.isRegister) type = 2;
+                var check = function (m, p, cp) {
+                    if (!com.checkMobile(m))
+                        return '手机号码不正确';
+                    if (p.length < 6)
+                        return '密码至少需要6位';
+
+                    if (type == 2) {
+                        if (p != cp)
+                            return '确认密码不一致';
+                    }
+
+                    return '';
+                }
+                var c = check(m, p, cp);
+                if (c.length > 0) {
+                    com.alert(c);
+                    return;
+                }
+                var fn = function (data) {
+                    $rootScope.hideLoading();
+                    if (data && data.code == 0) {
+                        $rootScope.User = bll.getUser();
+                        $rootScope.reloadLine = true;
+                        $rootScope.hideLogin();
+                    }
+                    else {
+                        com.alert(data.msg);
+                    }
+                }
+                $rootScope.showLoading();
+                bll.login(type, m, p, fn, $http);
+            }
+
+            $rootScope.resetHeight = function () {
+                return screen.height;
+            }
+            $rootScope.resetWidth = function () {
+                return screen.width;
+            }
+            $rootScope.cardWidth = function () {
+                return screen.width / 2 - 20;
+            }
+
+
+            $scope.aryAd01 = [];
+            var fn = function (data) {
+                $rootScope.hideLoading();
+                if (!data) return;
+                if (data && data.code != 0) {
+                    com.checkReload();
+                    return;
+                }
+                //$scope.category = ['人气贷款', '大额贷款', '短期贷款', '线上贷款', '信用卡代还', '线下贷款', '贷款搜索'];
+                $rootScope.records = data.Records;
+                $rootScope.category = data.Category;
+
+                var records = [];
+                var aryAd01 = [];
+                var aryAd02 = [];
+                for (var i = 0; i < data.Records.length; i++) {
+
+                    var item = data.Records[i];
+                    records[item.auto_id] = item;
+
+                    if (item.ad_position == 1 || item.ad_position == 3) {
+                        aryAd01.push(item.auto_id);
+                    }
+                    if (item.ad_position == 2 || item.ad_position == 3) {
+                        aryAd02.push(item.auto_id);
+                    }
+                }
+
+                $scope.recordMap = records;
+                $scope.aryAd01 = aryAd01;
+                $scope.aryAd02 = aryAd02;
+
+                $ionicSlideBoxDelegate.update();
+                $ionicSlideBoxDelegate.loop(true);
+            }
+
+
+            $rootScope.getItem = function (id) {
+                return $scope.recordMap[id];
+            }
+
+            var fnMaterial = function (data) {
+                if (data && data.code == 0) {
+
+                    var records = [];
+                    for (var i = 0; i < data.Records.length; i++) {
+                        records[data.Records[i].auto_id] = data.Records[i];
+                    }
+                    $scope.Materials = records;
+                }
+            }
+
+            $rootScope.getMaterial = function (id) {
+                return $scope.Materials[id].name;
+            }
+
+            var funcA = function () {
+                console.log("funcA");
+                return bll.getServeInfo(function (data) { console.log(data); }, $http);
+            }
+            var funcB = function () {
+                console.log("funcB");
+                return bll.getLoanMaterial(fnMaterial, $http);
+            }
+            var funcC = function () {
+                console.log("funcC");
+                return bll.getLoanPlats(0, fn, $http);
+            }
+
+            $rootScope.showLoading();
+            $q.all([funcA(), funcB(), funcC()])
+        .then(function (ary) {
+            $rootScope.hideLoading();
+            //console.log('result123');
+            console.log(ary);
+            if (ary[1] === undefined && com.getItem("LoanMaterial") == null) {
+                com.checkReload();
+                return;
+            }
+            if (ary[2] === undefined && com.getItem("LoanPlats") == null) {
+                com.checkReload();
+                return;
+            }
+
+        });
+            
+
+        }
+        //end if (bll.title == '51贷款管家') 
+
 
         $rootScope.showHide = 0;
         $rootScope.reloadLine = bll.isLogin();
@@ -494,8 +716,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     }
                 }
                 else {
-                    if (showReload == true) return;
-                    showReload = true;
                     com.checkReload();
                 }
             }
@@ -1004,6 +1224,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         else
             $scope.mobile = bll.getUser().mobile;
 
+        $scope.headImg = 'img/nohead.jpg';
+
         $ionicModal.fromTemplateUrl('templates/password.modal.html', {
             scope: $scope
         }).then(function (modal) {
@@ -1033,6 +1255,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
         $scope.goMessage = function () {
             $state.go('tabs.message-detail');
+        }
+
+        $scope.goLine = function () {
+            $state.go('tabs.line');
+
         }
 
         $scope.onTapLogout = function () {

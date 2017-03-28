@@ -6,10 +6,10 @@ var bll = {};
     //bll.service = 'http://192.168.0.138:8088/';
 	bll.service = 'http://app.doapple.com/iad-appapi/';
 	bll.imgserv = 'http://doapple-img.oss-cn-hangzhou.aliyuncs.com/dmh/';
-	//bll.service = 'http://localhost:8088/';
+	bll.service = 'http://localhost:8088/';
 
 	bll.app_id = 1;
-	bll.title = '51贷款管家';
+	bll.title = '51贷款之家';
 	bll.version='1.0.0';
 	bll.user_id=10;
 	bll.self_id=0;
@@ -55,8 +55,22 @@ var bll = {};
 		return false;   
     };
 
-    bll.get = function ($http,url,fn) {
-        $http.jsonp(url).success(function (data) {
+    bll.get = function ($http, url, fn) {
+        return $http.jsonp(url).success(function (data) {
+            if (data && data.code == 101) {//登录验证失败
+                com.removeItem("User");
+            }
+            fn(data);
+        }).error(
+            function (e) { console.log(e); fn({ "code": 100, "msg": "网络问题,请重试" }) }
+        );
+    }
+
+    bll.post = function ($http, url, param, fn) {
+        $http.post(url, param, { 'Content-Type': 'application/x-www-form-urlencoded' }).success(function (data) {
+            if (data && data.code == 101) {//登录验证失败
+                com.removeItem("User");
+            }
             fn(data);
         }).error(
             function (e) { console.log(e); fn({ "code": 100, "msg": "网络问题,请重试" }) }
@@ -112,25 +126,34 @@ var bll = {};
 	    if (fn) fn();
 	}
 
-	bll.logView = function (type, content, $http) {
-	    var Device = {};
-	    if (typeof (device) == 'object') {
-	        Device = device;
-	    }
-	    var data =
-			{
-			    "cmd": "D000012",
-			    "userId": bll.getUserId(),
-			    "token": bll.getToken(),
-			    "version": bll.version,
-			    "data": {
-			        "event_type": type,
-			        "event_content": content
-			    },
-			    "Device": Device
-			};
-	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
-	    bll.get($http, url, function () { });
+	bll.logView = function (type, content, $cordovaDevice, $http) {
+//	    var Device = {
+//	        "uuid": $cordovaDevice.getUUID(),
+//	        "platform": $cordovaDevice.getPlatform(),
+//	        "version": $cordovaDevice.getVersion(),
+//	        "model": $cordovaDevice.getModel(),
+//	        "device": $cordovaDevice.getDevice(),
+//	        "cordova": $cordovaDevice.getCordova()
+//	    };
+//	    if (typeof (device) == 'object') {
+//	        Device = device;
+//	    }
+//	    var data =
+//			{
+//			    "cmd": "D000012",
+//			    "userId": bll.getUserId(),
+//			    "token": bll.getToken(),
+//			    "version": bll.version,
+//			    "data": {
+//			        "app_id": bll.app_id,
+//			        "event_type": type,
+//			        "event_content": content
+//			    },
+//			    "Device": Device
+//			};
+//	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
+	    //bll.get($http, url, function () { });
+	    //bll.post($http, bll.service + 'xv1.htm', data, function () { });
 	}
 
 
@@ -148,21 +171,87 @@ var bll = {};
 	    bll.get($http, url, fn);
 	};
 
+	bll.getServeInfo = function (fn, $http) {
+	    var data =
+			{
+			    "cmd": "D010510",
+			    "userId": bll.getUserId(),
+			    "token": bll.getToken(),
+			    "version": bll.version,
+			    "data": {}
+			};
+		var inFn = function (data) {
+			if (data && data.code == 0) {
+			    com.setItem("ServeInfo", JSON.stringify(data));
+			}
+			else {
+			    try {
+			        var str = com.getItem("ServeInfo");
+			        if (str != null) {
+			            data = JSON.parse(str);
+			        }
+			    }
+			    catch (e) {
+			        console.log(e);
+			        com.removeItem("ServeInfo");
+			    }
+			}
+			fn(data);
+		}
+	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
+	    return bll.get($http, url, inFn);
+	};
+
 	bll.getLoanPlats = function (platType, fn, $http) {
 	    var data =
 		{
-			"cmd": "D010501",
-			"userId": bll.getUserId(),
-			"token": bll.getToken(),
-			"version": bll.version,
-			"data": {
-            "plat_type":platType
-            }
+		    "cmd": "D010501",
+		    "userId": bll.getUserId(),
+		    "token": bll.getToken(),
+		    "version": bll.version,
+		    "data": {
+		        "plat_type": platType
+		    }
 		};
 
-		var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
+	    var inFn = function (data) {
+	        if (data && data.code == 0) {
+	            com.setItem("LoanPlats", JSON.stringify(data));
+	        }
+	        else {
+	            try {
+	                var str = com.getItem("LoanPlats");
+	                if (str != null) {
+	                    data = JSON.parse(str);
+	                }
+	            }
+	            catch (e) {
+	                console.log(e);
+	                com.removeItem("LoanPlats");
+	            }
+	        }
+	        fn(data);
+	    }
 
-	    bll.get($http, url, fn);
+	    try {
+	        if (com.getItem("LoanPlats") != null && com.getItem("ServeInfo") != null) {
+	            var obj = JSON.parse(com.getItem("ServeInfo"));
+	            var obj1 = JSON.parse(com.getItem("LoanPlats"));
+	            if (obj.ModifyTime.loan_plat_time == obj1.loan_plat_time) {
+	                inFn({ "code": 101 });
+	                return;
+	            }
+	        }
+	    }
+	    catch (e) {
+	        console.log(e);
+	        com.removeItem("ServeInfo");
+	        com.removeItem("LoanPlats");
+	    }
+
+	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
+
+	    return bll.get($http, url, inFn);
 	};
 
 
@@ -210,7 +299,7 @@ var bll = {};
 	        fn(data);
 	    }
 	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
-	    bll.get($http, url, inFn);
+	    return bll.get($http, url, inFn);
 	}
 
 	bll.getLoanLine = function (lineId, fn, $http) {
@@ -268,8 +357,45 @@ var bll = {};
 			    "data": {}
 			};
 
-	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
-	    bll.get($http, url, fn);
+		var inFn = function (data) {
+			if (data && data.code == 0) {
+			    com.setItem("LoanMaterial", JSON.stringify(data));
+			}
+			else {
+			    try {
+			        var str = com.getItem("LoanMaterial");
+			        if (str != null) {
+			            data = JSON.parse(str);
+			        }
+			    }
+			    catch (e) {
+			        console.log(e);
+			        com.removeItem("LoanMaterial");
+			    }
+			}
+			fn(data);
+        }
+
+        try {
+            if (com.getItem("LoanMaterial") != null && com.getItem("ServeInfo") != null) {
+                var obj = JSON.parse(com.getItem("ServeInfo"));
+                var obj1 = JSON.parse(com.getItem("LoanMaterial"));
+                if (obj.ModifyTime.loan_material_time == obj1.loan_material_time) {
+                    inFn({ "code": 101 });
+                    return;
+                }
+            }
+        }
+        catch (e) {
+            console.log(e);
+            com.removeItem("ServeInfo");
+            com.removeItem("LoanMaterial");
+        }
+
+
+
+        var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
+	    return bll.get($http, url, inFn);
 	};
 
 	bll.saveLeave = function (platId, content, fn, $http) {

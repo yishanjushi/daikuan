@@ -1,10 +1,16 @@
 ﻿<ion-view view-title="我" ng-controller="SetCtrl" class="my-set">
 
+    <ion-nav-buttons side="left" >
+      <button ng-show="appTitle=='51贷款管家'" class="button button-clear button-primary" on-tap="goLine()"><i class="icon ion-ios-arrow-back"></i>返回</button>
+    </ion-nav-buttons>
+
     <ion-content class="padding">
        
       <div class="padding" ng-show="isLogin()==false">
         <button class="button button-block button-positive" on-tap="showLogin()" >您还未登录,点击登录</button>
       </div>
+
+      <div class="head-big-line"><img ng-src="{{headImg}}" on-tap="onTapSetHead()"></div>
 
       <div class="list">
 

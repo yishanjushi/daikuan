@@ -157,6 +157,8 @@
 
 .my-set{}
 .my-set .list a{border-left:none; border-right:none; border-top:none; border-bottom:1px solid #ddd; margin:0px;}
+.head-big-line {text-align:center}
+.head-big-line img{width:100px;height:100px;border-radius:100px; padding:2px; }
 
 
 .my-line{ padding:10px;  }
