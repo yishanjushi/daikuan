@@ -129,6 +129,15 @@
     height:20px;
     background-size:20px auto;
 }
+
+.ion-set-star
+{
+    background:url(../img/star.png) no-repeat center;
+    width:20px;
+    height:20px;
+    background-size:20px auto;
+}
+
 .ion-set-gywm
 {
     background:url(../img/gywm.png) no-repeat center;
@@ -165,7 +174,7 @@
 .my-line .row{border: 1px solid #d5d5d5; height:50px; border-radius: 5px; margin-top:10px;}
 .my-line .tian{font-size: 20px; color: #000; line-height: 20px; height: 20px; display: inline; clear: both;}
 .my-line .icon{color:#fff; border-radius: 3px; padding:2px; display:inline; text-align:center;}
-.setcircle{width: 60px; height: 60px; color:#fff; line-height:60px; text-align:center; font-size:28px; font-weight:bolder; background-color: #a72525; -webkit-border-radius: 30px; position:absolute; bottom:0px; right:0px; margin-right:10px; margin-bottom:10px; opacity:0.8;}
+.setcircle{width: 48px; height: 48px; color:#fff; line-height:48px; text-align:center; font-size:22px; font-weight:bolder; background-color: #f77c7e; -webkit-border-radius: 24px; position:absolute; bottom:0px; right:0px; margin-right:10px; margin-bottom:10px; opacity:0.8;}
 
 .line-sel .tabs .tabs-top{top:0px;}
 

@@ -1,6 +1,10 @@
 <ion-view hide-tabs="true" view-title="{{title}}" ng-controller="MessageDetailCtrl">
+
+    <ion-nav-buttons side="left" >
+      <button ng-show="backViewStateId=='tabs.line'" class="button button-clear button-primary" on-tap="goLine()"><i class="icon ion-ios-arrow-back"></i>返回</button>
+    </ion-nav-buttons>
   <ion-nav-buttons side="right">
-      <button class="button" style="background-color: #1BBB37;" on-tap="doRefresh()">
+      <button class="button" style="background-color: #1BBB37; border:none;" on-tap="doRefresh()">
         刷新
       </button>
     </ion-nav-buttons>

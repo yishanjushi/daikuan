@@ -12,6 +12,7 @@
     <config-file url="http://dmh.doapple.com/www_daikuan/chcp.json"/>
   </chcp>
   <plugin name="cordova-plugin-whitelist" spec="1"/>
+  <plugin name="cordova-plugin-device" source="npm" spec="~1.1.1" />
   <access origin="*"/>
   <allow-navigation href="*"/>
   <allow-intent href="http:*"/>

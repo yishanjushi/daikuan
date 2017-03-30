@@ -6,10 +6,10 @@ var bll = {};
     //bll.service = 'http://192.168.0.138:8088/';
 	bll.service = 'http://app.doapple.com/iad-appapi/';
 	bll.imgserv = 'http://doapple-img.oss-cn-hangzhou.aliyuncs.com/dmh/';
-	bll.service = 'http://localhost:8088/';
+	//bll.service = 'http://localhost:8088/';
 
 	bll.app_id = 1;
-	bll.title = '51贷款之家';
+	bll.title = '51贷款管家';
 	bll.version='1.0.0';
 	bll.user_id=10;
 	bll.self_id=0;
@@ -31,6 +31,12 @@ var bll = {};
 		if(user==null)	return 0;
 		return user.user_id;
 	};
+
+	bll.getUuId = function () {
+	    if (window.device)
+	        return window.device.uuid;
+	    return '';
+	}
 	
 	bll.getToken=function()
 	{
@@ -56,7 +62,7 @@ var bll = {};
     };
 
     bll.get = function ($http, url, fn) {
-        return $http.jsonp(url).success(function (data) {
+        return $http.jsonp(encodeURI(url)).success(function (data) {
             if (data && data.code == 101) {//登录验证失败
                 com.removeItem("User");
             }
@@ -126,33 +132,28 @@ var bll = {};
 	    if (fn) fn();
 	}
 
-	bll.logView = function (type, content, $cordovaDevice, $http) {
-//	    var Device = {
-//	        "uuid": $cordovaDevice.getUUID(),
-//	        "platform": $cordovaDevice.getPlatform(),
-//	        "version": $cordovaDevice.getVersion(),
-//	        "model": $cordovaDevice.getModel(),
-//	        "device": $cordovaDevice.getDevice(),
-//	        "cordova": $cordovaDevice.getCordova()
-//	    };
-//	    if (typeof (device) == 'object') {
-//	        Device = device;
-//	    }
-//	    var data =
-//			{
-//			    "cmd": "D000012",
-//			    "userId": bll.getUserId(),
-//			    "token": bll.getToken(),
-//			    "version": bll.version,
-//			    "data": {
-//			        "app_id": bll.app_id,
-//			        "event_type": type,
-//			        "event_content": content
-//			    },
-//			    "Device": Device
-//			};
-//	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
-	    //bll.get($http, url, function () { });
+	bll.logView = function (type, content, $http) {
+	    var tmp =
+        {
+            "uuid":"test",
+            "platform": "Windows 7",
+            "model": ""
+        }
+	    var data =
+			{
+			    "cmd": "D000012",
+			    "userId": bll.getUserId(),
+			    "token": bll.getToken(),
+			    "version": bll.version,
+			    "data": {
+			        "app_id": bll.app_id,
+			        "event_type": type,
+			        "event_content": content
+			    },
+			    "Device": typeof (window.device) == 'undefined' ? tmp : window.device
+			};
+	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
+	    bll.get($http, url, function () { });
 	    //bll.post($http, bll.service + 'xv1.htm', data, function () { });
 	}
 
@@ -298,6 +299,10 @@ var bll = {};
 	        }
 	        fn(data);
 	    }
+
+
+
+
 	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
 	    return bll.get($http, url, inFn);
 	}
@@ -431,8 +436,7 @@ var bll = {};
 	    bll.get($http, url, fn);
 	};
 
-	bll.sendMessage = function (obj, fn, $http)
-	{
+	bll.sendMessage = function (obj, fn, $http) {
 	    var data =
 			{
 			    "cmd": "D000010",
@@ -443,10 +447,10 @@ var bll = {};
 			        "app_id": bll.app_id,
 			        "content_type": obj.content_type,
 			        "content": obj.content,
-                    "auto_id":obj.auto_id
+			        "auto_id": obj.auto_id,
+                    "uuid":bll.getUuId()
 			    }
 			};
-
 	    var url = bll.service + 'xv1.htm?data=' + JSON.stringify(data) + '&callback=JSON_CALLBACK';
 	    bll.get($http, url, fn);
 	}
@@ -460,7 +464,8 @@ var bll = {};
 			    "version": bll.version,
 			    "data": {
 			        "app_id": bll.app_id,
-			        "last_auto_id": lastAutoId
+			        "last_auto_id": lastAutoId,
+                    "uuid":bll.getUuId()
 			    }
 			};
 

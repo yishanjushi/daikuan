@@ -1,0 +1,15 @@
+﻿
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header bar-positive">
+    <button class="button button-clear button-primary" on-tap="remarkModal.hide()"><i class="icon ion-ios-arrow-back"></i>返回</button>
+    <h1 class="title">临时备注</h1>
+  </ion-header-bar>
+    <ion-content>
+      <p style="margin:15px;">当网络或者服务器出现故障时可以先再这里做备注</p>
+      <textarea style="width:100%; height:100px;border:1px solid #ddd; padding-left:5px;" ng-model="temporaryRemark"></textarea>
+      <p style="margin:15px; margin-top:5px; font-size:10px;color:#ff0000">故障恢复后记得继续要做的事情哦</p>
+      <div class="padding">
+        <button class="button button-block button-positive" on-tap="submitRemark(temporaryRemark)" >保 存</button>
+      </div>
+    </ion-content>
+</ion-modal-view>

@@ -5,13 +5,11 @@
     </ion-nav-buttons>
 
     <ion-content class="padding">
-       
+
+      <div class="head-big-line"><img ng-src="{{headImg}}" on-tap="onTapSetHead()"></div>
       <div class="padding" ng-show="isLogin()==false">
         <button class="button button-block button-positive" on-tap="showLogin()" >您还未登录,点击登录</button>
       </div>
-
-      <div class="head-big-line"><img ng-src="{{headImg}}" on-tap="onTapSetHead()"></div>
-
       <div class="list">
 
         <a class="item item-icon-left" ng-show="isLogin()">
@@ -20,18 +18,22 @@
 
         </a>
 
-        <a class="item item-icon-left item-icon-right" ng-show="isLogin()" on-tap="goMessage()">
+        <a class="item item-icon-left item-icon-right" on-tap="goMessage()">
           <i class="icon ion-set-xin"></i>
           直连客服/产品经理
           <i class="icon ion-set-jiantou"></i>
         </a>
 
-        <a class="item item-icon-left item-icon-right" ng-show="isLogin()" on-tap="modal.show()">
+        <a class="item item-icon-left item-icon-right" ng-show="isLogin()" on-tap="modifyPass()">
           <i class="icon ion-set-xiugai"></i>
           修改/设置密码
           <i class="icon ion-set-jiantou"></i>
         </a>
-
+        <a class="item item-icon-left item-icon-right" on-tap="goAppStore()">
+          <i class="icon ion-set-star"></i>
+          点评/提意见
+          <i class="icon ion-set-jiantou"></i>
+        </a>
         <a class="item item-icon-left item-icon-right" href="#/tab/about">
           <i class="icon ion-set-gywm"></i>
           关于我们

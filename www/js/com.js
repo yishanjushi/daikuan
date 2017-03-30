@@ -95,6 +95,12 @@
 	        }
 	    });
 	};
+
+    com.URLencode = function(sStr) {
+
+	    return escape(sStr).replace(/\+/g, '%2B').replace(/\"/g, '%22').replace(/\'/g, '%27').replace(/\//g, '%2F');
+
+	}
 	
 	
 	com.setItem= function(key, val, c) {

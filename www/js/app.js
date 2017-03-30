@@ -7,6 +7,12 @@ var app = angular.module('starter', ['ionic', 'monospaced.elastic'])
 .run(function ($ionicPlatform, $http, Push) {
 
     $ionicPlatform.ready(function () {
+//        console.log('window.device');
+//        console.log(window.device);
+
+//        console.log('ionic.Platform.device()');
+//        console.log(ionic.Platform.device());
+
         if (window.cordova && window.cordova.plugins.Keyboard) {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -102,6 +108,8 @@ var app = angular.module('starter', ['ionic', 'monospaced.elastic'])
                 onOpenNotification(null);
             }, 0);
         }
+
+        bll.logView(1, 'open', $http);
 
     });
 });
@@ -286,178 +294,183 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
     app.controller('HomeTabCtrl', function ($scope, $http, $q, $rootScope, $state, $ionicModal, $ionicPopup, $ionicSlideBoxDelegate, $ionicViewSwitcher, $ionicLoading) {
 
-        //bll.logView(1, 'open', $cordovaDevice, $http);
+        if (bll.title != '51贷款管家') {
 
-        $ionicModal.fromTemplateUrl('templates/login.modal.html', {
-            scope: $scope
-        }).then(function (modal) {
-            $scope.loginModal = modal;
-        });
-
-        $rootScope.showLoading = function () {
-            $ionicLoading.show({
-                template: '<ion-spinner icon="ios"></ion-spinner>',
-                noBackdrop: true
+            $ionicModal.fromTemplateUrl('templates/login.modal.html', {
+                scope: $scope
+            }).then(function (modal) {
+                $scope.loginModal = modal;
             });
-        }
 
-        $rootScope.hideLoading = function () {
-            $ionicLoading.hide();
-        }
+            $rootScope.showLoading = function () {
+                $ionicLoading.show({
+                    template: '<ion-spinner icon="ios"></ion-spinner>',
+                    noBackdrop: true
+                });
+            }
 
-        $rootScope.appTitle = bll.title;
-        $rootScope.alert = function (content) {
-            $ionicPopup.alert({
-                title: '提示',
-                template: content,
-                okText: '确定'
-            });
-        }
+            $rootScope.hideLoading = function () {
+                $ionicLoading.hide();
+            }
 
-        $rootScope.getUser = function () { return bll.getUser() };
-        $rootScope.User = bll.getUser();
+            $rootScope.goLine = function () {
+                $state.go('tabs.line');
+            }
+            $rootScope.appTitle = bll.title;
+            $rootScope.alert = function (content) {
+                $ionicPopup.alert({
+                    title: '提示',
+                    template: content,
+                    okText: '确定'
+                });
+            }
 
-        $rootScope.isLogin = function () {
-            return bll.isLogin();
-        }
+            $rootScope.getUser = function () { return bll.getUser() };
+            $rootScope.User = bll.getUser();
 
-        $rootScope.isRegister = false;
-        $scope.loginTitle = '登录';
-        $scope.loginBtnTitle = '登录';
-        $rootScope.showLogin = function () {
-            $scope.loginModal.show();
-        }
-        $rootScope.hideLogin = function () {
+
+
+            $rootScope.isLogin = function () {
+                return bll.isLogin();
+            }
+
             $rootScope.isRegister = false;
             $scope.loginTitle = '登录';
             $scope.loginBtnTitle = '登录';
-            $scope.loginModal.hide();
-        }
-        $rootScope.goRegister = function () {
-            $rootScope.isRegister = true;
-            $scope.loginTitle = '注册';
-            $scope.loginBtnTitle = '注册';
-        }
+            $rootScope.showLogin = function () {
+                $scope.loginModal.show();
+            }
+            $rootScope.hideLogin = function () {
+                $rootScope.isRegister = false;
+                $scope.loginTitle = '登录';
+                $scope.loginBtnTitle = '登录';
+                $scope.loginModal.hide();
+            }
+            $rootScope.goRegister = function () {
+                $rootScope.isRegister = true;
+                $scope.loginTitle = '注册';
+                $scope.loginBtnTitle = '注册';
+            }
 
 
-        $rootScope.onTapLogin = function (m, p, cp) {
-            var type = 1;
-            if ($rootScope.isRegister) type = 2;
-            var check = function (m, p, cp) {
-                if (!com.checkMobile(m))
-                    return '手机号码不正确';
-                if (p.length < 6)
-                    return '密码至少需要6位';
+            $rootScope.onTapLogin = function (m, p, cp) {
+                var type = 1;
+                if ($rootScope.isRegister) type = 2;
+                var check = function (m, p, cp) {
+                    if (!com.checkMobile(m))
+                        return '手机号码不正确';
+                    if (p.length < 6)
+                        return '密码至少需要6位';
 
-                if (type == 2) {
-                    if (p != cp)
-                        return '确认密码不一致';
+                    if (type == 2) {
+                        if (p != cp)
+                            return '确认密码不一致';
+                    }
+
+                    return '';
                 }
+                var c = check(m, p, cp);
+                if (c.length > 0) {
+                    com.alert(c);
+                    return;
+                }
+                var fn = function (data) {
+                    $rootScope.hideLoading();
+                    if (data && data.code == 0) {
+                        $rootScope.User = bll.getUser();
+                        $rootScope.reloadLine = true;
+                        $rootScope.hideLogin();
+                    }
+                    else {
+                        com.alert(data.msg);
+                    }
+                }
+                $rootScope.showLoading();
+                bll.login(type, m, p, fn, $http);
+            }
 
-                return '';
+            $rootScope.resetHeight = function () {
+                return screen.height;
             }
-            var c = check(m, p, cp);
-            if (c.length > 0) {
-                com.alert(c);
-                return;
+            $rootScope.resetWidth = function () {
+                return screen.width;
             }
+            $rootScope.cardWidth = function () {
+                return screen.width / 2 - 20;
+            }
+
+
+            $scope.aryAd01 = [];
             var fn = function (data) {
                 $rootScope.hideLoading();
-                if (data && data.code == 0) {
-                    $rootScope.User = bll.getUser();
-                    $rootScope.reloadLine = true;
-                    $rootScope.hideLogin();
+                if (!data) return;
+                if (data && data.code != 0) {
+                    com.checkReload();
+                    return;
                 }
-                else {
-                    com.alert(data.msg);
-                }
-            }
-            $rootScope.showLoading();
-            bll.login(type, m, p, fn, $http);
-        }
-
-        $rootScope.resetHeight = function () {
-            return screen.height;
-        }
-        $rootScope.resetWidth = function () {
-            return screen.width;
-        }
-        $rootScope.cardWidth = function () {
-            return screen.width / 2 - 20;
-        }
-
-
-        $scope.aryAd01 = [];
-        var fn = function (data) {
-            $rootScope.hideLoading();
-            if (!data) return;
-            if (data && data.code != 0) {
-                com.checkReload();
-                return;
-            }
-            //$scope.category = ['人气贷款', '大额贷款', '短期贷款', '线上贷款', '信用卡代还', '线下贷款', '贷款搜索'];
-            $rootScope.records = data.Records;
-            $rootScope.category = data.Category;
-
-            var records = [];
-            var aryAd01 = [];
-            var aryAd02 = [];
-            for (var i = 0; i < data.Records.length; i++) {
-
-                var item = data.Records[i];
-                records[item.auto_id] = item;
-
-                if (item.ad_position == 1 || item.ad_position == 3) {
-                    aryAd01.push(item.auto_id);
-                }
-                if (item.ad_position == 2 || item.ad_position == 3) {
-                    aryAd02.push(item.auto_id);
-                }
-            }
-
-            $scope.recordMap = records;
-            $scope.aryAd01 = aryAd01;
-            $scope.aryAd02 = aryAd02;
-
-            $ionicSlideBoxDelegate.update();
-            $ionicSlideBoxDelegate.loop(true);
-        }
-
-
-        $rootScope.getItem = function (id) {
-            return $scope.recordMap[id];
-        }
-
-        var fnMaterial = function (data) {
-            if (data && data.code == 0) {
+                //$scope.category = ['人气贷款', '大额贷款', '短期贷款', '线上贷款', '信用卡代还', '线下贷款', '贷款搜索'];
+                $rootScope.records = data.Records;
+                $rootScope.category = data.Category;
 
                 var records = [];
+                var aryAd01 = [];
+                var aryAd02 = [];
                 for (var i = 0; i < data.Records.length; i++) {
-                    records[data.Records[i].auto_id] = data.Records[i];
+
+                    var item = data.Records[i];
+                    records[item.auto_id] = item;
+
+                    if (item.ad_position == 1 || item.ad_position == 3) {
+                        aryAd01.push(item.auto_id);
+                    }
+                    if (item.ad_position == 2 || item.ad_position == 3) {
+                        aryAd02.push(item.auto_id);
+                    }
                 }
-                $scope.Materials = records;
+
+                $scope.recordMap = records;
+                $scope.aryAd01 = aryAd01;
+                $scope.aryAd02 = aryAd02;
+
+                $ionicSlideBoxDelegate.update();
+                $ionicSlideBoxDelegate.loop(true);
             }
-        }
 
-        $rootScope.getMaterial = function (id) {
-            return $scope.Materials[id].name;
-        }
 
-        var funcA = function () {
-            console.log("funcA");
-            return bll.getServeInfo(function (data) { console.log(data); }, $http);
-        }
-        var funcB = function () {
-            console.log("funcB");
-            return bll.getLoanMaterial(fnMaterial, $http);
-        }
-        var funcC = function () {
-            console.log("funcC");
-            return bll.getLoanPlats(0, fn, $http);
-        }
+            $rootScope.getItem = function (id) {
+                return $scope.recordMap[id];
+            }
 
-        $rootScope.showLoading();
-        $q.all([funcA(), funcB(), funcC()])
+            var fnMaterial = function (data) {
+                if (data && data.code == 0) {
+
+                    var records = [];
+                    for (var i = 0; i < data.Records.length; i++) {
+                        records[data.Records[i].auto_id] = data.Records[i];
+                    }
+                    $scope.Materials = records;
+                }
+            }
+
+            $rootScope.getMaterial = function (id) {
+                return $scope.Materials[id].name;
+            }
+
+            var funcA = function () {
+                console.log("funcA");
+                return bll.getServeInfo(function (data) {  }, $http);
+            }
+            var funcB = function () {
+                console.log("funcB");
+                return bll.getLoanMaterial(fnMaterial, $http);
+            }
+            var funcC = function () {
+                console.log("funcC");
+                return bll.getLoanPlats(0, fn, $http);
+            }
+
+            $rootScope.showLoading();
+            $q.all([funcA(), funcB(), funcC()])
         .then(function (ary) {
             $rootScope.hideLoading();
             //console.log('result123');
@@ -472,6 +485,12 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
 
         });
+
+
+
+        }
+        //end if
+
 
 
 
@@ -496,12 +515,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
     });
 
-    app.controller('LineCtrl', function ($scope, $rootScope, $http, $q,  $ionicSlideBoxDelegate, $state, $ionicModal, $ionicActionSheet, $ionicLoading) {
+    app.controller('LineCtrl', function ($scope, $rootScope, $http, $q, $ionicSlideBoxDelegate, $state, $ionicModal, $ionicActionSheet, $ionicLoading) {
 
 
         if (bll.title == '51贷款管家') {
 
-            bll.logView(1, 'open', $http);
 
             $ionicModal.fromTemplateUrl('templates/login.modal.html', {
                 scope: $scope
@@ -520,6 +538,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 $ionicLoading.hide();
             }
 
+            $rootScope.goLine = function () {
+                $state.go('tabs.line');
+            }
             $rootScope.appTitle = bll.title;
             $rootScope.alert = function (content) {
                 $ionicPopup.alert({
@@ -531,6 +552,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 
             $rootScope.getUser = function () { return bll.getUser() };
             $rootScope.User = bll.getUser();
+
+
 
             $rootScope.isLogin = function () {
                 return bll.isLogin();
@@ -687,11 +710,42 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             }
 
         });
-            
+
+
 
         }
         //end if (bll.title == '51贷款管家') 
 
+
+        $scope.temporaryRemark = com.getItem("TemporaryRemark") == null ? '' : com.getItem("TemporaryRemark");
+        $ionicModal.fromTemplateUrl('templates/remark.modal.html', {
+            scope: $scope
+        }).then(function (modal) {
+            $scope.remarkModal = modal;
+        });
+
+        $scope.submitRemark = function (message) {
+            if (typeof (message) == 'undefined')
+                return;
+
+            $rootScope.showLoading();
+            com.setItem("TemporaryRemark", message);
+            setTimeout(function () {
+                $rootScope.hideLoading();
+                $scope.remarkModal.hide();
+            }, 400);
+        }
+
+        if (bll.title == '51贷款管家')
+            $scope.title = '51贷款管家';
+        else
+            $scope.title = '我的贷款';
+
+        $scope.showTalk = true;
+        if (bll.isLogin()) {
+            if ($rootScope.User.user_id != 3)
+                $scope.showTalk = false;
+        }
 
         $rootScope.showHide = 0;
         $rootScope.reloadLine = bll.isLogin();
@@ -738,6 +792,18 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 			    "line_id": x.auto_id
 			};
             $state.go('tabs.line-detail', params);
+        }
+
+        $scope.goHome = function (x) {
+            $state.go('tabs.home');
+        }
+
+        $scope.goPlat = function (x) {
+            $state.go('tabs.plat');
+        }
+
+        $scope.goMessage = function () {
+            $state.go('tabs.message-detail');
         }
 
         $scope.goSet = function (x) {
@@ -904,6 +970,20 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                         $scope.Line.plat_id = 0;
 
             }
+            console.log($scope.Line);
+            if ($scope.Line.loan_name.length == 0) {
+                com.alert('请输入贷款名称', function () { }); return;
+            }
+
+            if ($scope.Line.loan_amount - 0==0) {
+                com.alert('请输入贷款金额', function () { }); return;
+            }
+
+            if ($scope.Line.local_amount - 0==0) {
+                com.alert('请输入还款金额', function () { }); return;
+            }
+
+
             var fn = function (data) {
                 $rootScope.hideLoading();
                 if (data && data.code == 0) {
@@ -917,7 +997,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                             $ionicHistory.goBack();
                     }
                     else
-                    $ionicHistory.goBack();
+                        $ionicHistory.goBack();
                 }
                 else
                     com.alert(data.msg);
@@ -1018,6 +1098,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     text: x.state == 1 ? '取消隐藏' : '隐藏'
                 }, {
                     text: '删除'
+                }, {
+                    text: '申请贷款'
                 }
                 ],
                 titleText: '选项',
@@ -1027,20 +1109,20 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 },
                 buttonClicked: function (index) {
                     switch (index) {
-                        //                        case 0://设置还款     
-                        //                            var fnSetLine = function (data) {     
-                        //                                if (data && data.code == 0) {     
+                        //                        case 0://设置还款        
+                        //                            var fnSetLine = function (data) {        
+                        //                                if (data && data.code == 0) {        
 
-                        //                                    reload();     
-                        //                                }     
-                        //                            }     
-                        //                            var params =     
-                        //                            {     
-                        //                                line_id: x.auto_id,     
-                        //                                repayed: x.repayed == 0 ? 1 : 0     
-                        //                            }     
-                        //                            bll.setLoanLine(params, fnSetLine, $http);     
-                        //                            break;     
+                        //                                    reload();        
+                        //                                }        
+                        //                            }        
+                        //                            var params =        
+                        //                            {        
+                        //                                line_id: x.auto_id,        
+                        //                                repayed: x.repayed == 0 ? 1 : 0        
+                        //                            }        
+                        //                            bll.setLoanLine(params, fnSetLine, $http);        
+                        //                            break;        
                         case 0: //编辑
                             var params =
 			                {
@@ -1112,6 +1194,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                                 bll.setLoanLine(params, fnSetLine, $http);
                             }
                             com.confirm('删除是不可恢复的,确定要删除吗?', fn, '删除', ['确定', '取消']);
+                            break;
+                        case 4: //申请贷款
+                            if ($scope.Line.ad_url.length > 0) {
+                                com.open($scope.Line.ad_url);
+                            }
                             break;
                         default:
                             break;
@@ -1187,8 +1274,9 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         $scope.category = $rootScope.category;
         $scope.records = $rootScope.records;
         $scope.onTapItem = function (x) {
-            if(x.apply_users==0)
-            {
+
+            bll.logView(101, x.auto_id, $http);
+            if (x.apply_users == 0) {
                 com.open(x.ad_url);
                 return;
             }
@@ -1257,10 +1345,6 @@ app.config(function ($stateProvider, $urlRouterProvider) {
             $state.go('tabs.message-detail');
         }
 
-        $scope.goLine = function () {
-            $state.go('tabs.line');
-
-        }
 
         $scope.onTapLogout = function () {
             var fn = function () {
@@ -1268,6 +1352,18 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 $rootScope.reloadLine = true;
             }
             bll.logout(fn);
+        }
+
+        $scope.modifyPass = function () {
+            if (!bll.isLogin()) {
+                $rootScope.showLogin();
+                return;
+            }
+            $scope.modal.show();
+        }
+
+        $scope.goAppStore = function () {
+            window.open('itms-apps://itunes.apple.com/us/app/51贷款管家/id1211230723?l=zh&ls=1&mt=8');
         }
     });
 
@@ -1297,6 +1393,10 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         }
 
         $scope.submitLeave = function (message) {
+
+            if (typeof(message)=='undefined'||message.length < 5) {
+                com.alert('至少输入5个字符', function () { }); return;
+            }
             var fn = function (data) {
                 $rootScope.hideLoading();
                 com.alert(data.msg);
@@ -1336,56 +1436,57 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     });
 
 
-    app.controller('MessageDetailCtrl', function ($scope, $rootScope, $http, $state, $ionicScrollDelegate) {
+    app.controller('MessageDetailCtrl', function ($scope, $rootScope, $http, $state, $ionicScrollDelegate, $ionicHistory) {
         console.log('MessageDetailCtrl');
-        var lastAutoId=0;
-        $scope.title='对话';
-        $scope.messageDetils=[];
-        var newMsgMap=[];
-        $scope.doRefresh=function()
-        {
-            newMsgMap=[];
-            var fn=function(data)
-            {
-                if(data&&data.code==0)
-                {
+        console.log($ionicHistory.viewHistory().backView.stateId);
+
+
+        $scope.$on('$ionicView.beforeEnter', function () { $scope.backViewStateId = $ionicHistory.viewHistory().backView.stateId; });
+
+        var lastAutoId = 0;
+        $scope.title = '对话';
+        $scope.messageDetils = [];
+        var newMsgMap = [];
+        $scope.doRefresh = function () {
+            newMsgMap = [];
+            var fn = function (data) {
+                if (data && data.code == 0) {
                     $scope.messageDetils = data.Records;
                 }
                 $ionicScrollDelegate.$getByHandle('messageDetailsScroll').scrollBottom();
             }
             bll.getMessages(lastAutoId, fn, $http);
-            
+
         }
         $scope.doRefresh();
 
         $scope.sendMessage = function (msg) {
-            var obj=
+            var obj =
             {
-                "auto_id":new Date().getTime(),
-                "content_type":1,
-                "user_id":bll.getUserId(),
-                "time":'',
-                "re_user_id":0,
-                "content":msg
+                "auto_id": new Date().getTime(),
+                "content_type": 1,
+                "user_id": bll.getUserId(),
+                "time": '',
+                "re_user_id": 0,
+                "content": msg
             }
-            newMsgMap[obj.auto_id] = $scope.messageDetils.push(obj)-1;
-            $scope.send_content='';
-            var fn=function(data)
-            {   console.log(data);
-                if(data&&data.code==0)
-                {
+            newMsgMap[obj.auto_id] = $scope.messageDetils.push(obj) - 1;
+            $scope.send_content = '';
+            var fn = function (data) {
+                //console.log(data);
+                if (data && data.code == 0) {
                     var localId = data.UserTalk.local_id;
-                    $scope.messageDetils.splice(newMsgMap[localId],1,data.UserTalk);
+                    $scope.messageDetils.splice(newMsgMap[localId], 1, data.UserTalk);
                 }
-                
+
             }
-            bll.sendMessage(obj,fn,$http);
+            bll.sendMessage(obj, fn, $http);
 
             $ionicScrollDelegate.$getByHandle('messageDetailsScroll').scrollBottom();
         }
 
         if (ionic.Platform.isIOS()) {
-            if(typeof(cordova)!='undefined')
+            if (typeof (cordova) != 'undefined')
                 cordova.plugins.Keyboard.disableScroll(true);
         }
 
